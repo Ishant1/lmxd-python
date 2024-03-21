@@ -9,7 +9,7 @@ class OcrDatasetFinetuning(Dataset):
         self.empty_schema = empty_schema
         
     def __len__(self):
-        return len(self.split_list)
+        return len(self.data_list)
     
     def __getitem__(self,index):
         input_text = create_word_bbox_text(self.data_list[index].word, self.data_list[index].bbox_quantized, self.empty_schema)
