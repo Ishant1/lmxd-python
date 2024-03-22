@@ -1,11 +1,7 @@
-import tempfile
 import transformers as tr
-import os
 
 
-def load_model_and_tokenizer(model_path: str=r"C:\dev\models\gpt2"):
-    tmpdir = tempfile.TemporaryDirectory()
-    local_training_root = tmpdir.name
+def load_model_and_tokenizer(model_path: str):
 
     tokenizer = tr.AutoTokenizer.from_pretrained(
         model_path,

@@ -4,7 +4,7 @@ from tqdm import tqdm
 
 from Model.dataset import OcrDatasetFinetuning
 from Model.utils import load_model_and_tokenizer
-from config import RESPONSE_FILEPATH, IMAGE_PATH, training_args
+from config import RESPONSE_FILEPATH, IMAGE_PATH, training_args, MODEL_PATH
 from datasets.floorplan.ocr import OcrEngine, load_ocr_from_file, save_ocr_result
 from datasets.floorplan.preprocess import (
     create_floorplan_document, create_split_from_document, load_all_results, RoomInfo, FloorplanEntity
@@ -14,6 +14,7 @@ import transformers as tr
 def run_finetune(
         entity_path: str = RESPONSE_FILEPATH,
         image_dir: str | None = IMAGE_PATH,
+        model_path: str | None = MODEL_PATH,
         ocr_result_path: str | None = None,
 ):
 
@@ -44,7 +45,7 @@ def run_finetune(
         floorplan_split_dataset = create_split_from_document(floorplan_dataset)
         split_documents.append(floorplan_split_dataset)
 
-    model, tokenizer = load_model_and_tokenizer()
+    model, tokenizer = load_model_and_tokenizer(model_path)
 
     ocr_dataset = OcrDatasetFinetuning(
         data_list=split_documents,

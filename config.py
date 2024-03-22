@@ -6,6 +6,7 @@ local_training_root = tmpdir.name
 
 IMAGE_PATH = r"C:\dev\datasets\floorplan\images"
 RESPONSE_FILEPATH = r"C:\dev\datasets\floorplan\accepted_responses.json"
+MODEL_PATH = r"C:\dev\models\gpt2"
 
 training_args = tr.TrainingArguments(
         local_training_root+'\checkpoints',
