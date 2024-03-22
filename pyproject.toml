@@ -19,6 +19,7 @@ paddlepaddle = "^2.6.1"
 torch = "^2.2.1"
 transformers = "^4.38.2"
 accelerate = "^0.28.0"
+sentencepiece = "^0.2.0"
 
 
 [tool.poetry.group.dev.dependencies]

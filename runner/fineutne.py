@@ -2,8 +2,8 @@ import os.path
 
 from tqdm import tqdm
 
-from Model.dataset import OcrDatasetFinetuning
-from Model.utils import load_model_and_tokenizer
+from Model.gpt2.dataset import OcrDatasetFinetuning
+from Model.gpt2.utils import load_model_and_tokenizer
 from config import RESPONSE_FILEPATH, IMAGE_PATH, training_args, MODEL_PATH
 from datasets.floorplan.ocr import OcrEngine, load_ocr_from_file, save_ocr_result
 from datasets.floorplan.preprocess import (
