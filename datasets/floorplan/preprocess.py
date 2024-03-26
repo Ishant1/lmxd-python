@@ -34,14 +34,14 @@ def load_all_results(filepath):
 
 
 def create_floorplan_document(
-        document_ocr: OcrFileOutput,
+        document_ocr: OcrFileOutput | None,
         key: str,
         entity: FloorplanEntity | None = None,
 ) -> FloorplanDocument:
     floorplan_document = FloorplanDocument(
         key=key,
-        bbox= [ocr_output.bbox for ocr_output in document_ocr.ocr_result],
-        word= [ocr_output.text for ocr_output in document_ocr.ocr_result],
+        bbox= [ocr_output.bbox for ocr_output in document_ocr.ocr_result] if document_ocr else None,
+        word= [ocr_output.text for ocr_output in document_ocr.ocr_result] if document_ocr else None,
         entity=entity
     )
 

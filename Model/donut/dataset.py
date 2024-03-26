@@ -1,6 +1,7 @@
 from torch.utils.data import Dataset
 from PIL import Image
 import numpy as np
+import cv2
 
 
 class DonutFinetuning(Dataset):
@@ -79,6 +80,11 @@ def json2token(
 def load_image_from_local(key: str, image_dir: str):
     img = Image.open(f"{image_dir}/{key}.jpeg")
     numpy_img = np.array(img)
+    if len(numpy_img.shape)==2:
+        numpy_img = cv2.cvtColor(numpy_img, cv2.COLOR_GRAY2RGB)
+    elif len(numpy_img.shape)==3 and numpy_img.shape[2]!=3:
+        numpy_img = numpy_img.mean(axis=2).astype("uint8")
+        numpy_img = cv2.cvtColor(numpy_img, cv2.COLOR_GRAY2RGB)
     return numpy_img
 
     
