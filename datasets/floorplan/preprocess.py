@@ -34,8 +34,8 @@ def load_all_results(filepath):
 
 
 def create_floorplan_document(
-        document_ocr: OcrFileOutput | None,
         key: str,
+        document_ocr: OcrFileOutput | None = None,
         entity: FloorplanEntity | None = None,
 ) -> FloorplanDocument:
     floorplan_document = FloorplanDocument(

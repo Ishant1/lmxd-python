@@ -3,17 +3,15 @@ from datasets.floorplan.preprocess import FloorplanEntity, RoomInfo, create_floo
 from config import RESPONSE_FILEPATH, IMAGE_PATH
 from Model.donut.dataset import DonutFinetuning
 from transformers import Seq2SeqTrainingArguments, Seq2SeqTrainer
-from logging import getLogger
+import logging
 
-logger = getLogger(name="finetuning_logger")
-
-logger.info("Starting the process")
+logging.info("Starting the process")
 special_tokens = get_special_tokens([FloorplanEntity, RoomInfo])
 
-logger.info("Loading the model")
+logging.info("Loading the model")
 model, preprocessor = load_model_and_tokenizer("naver-clova-ix/donut-base" , special_tokens)
 
-logger.info("Loading the data")
+logging.info("Loading the data")
 all_entities = load_all_results(RESPONSE_FILEPATH)
 documents = [
     create_floorplan_document(key=key,entity=all_entities[key]) for key in all_entities.keys()
@@ -41,7 +39,7 @@ training_args = Seq2SeqTrainingArguments(
     report_to=None,
 )
 
-logger.info("Loading commenced")
+logging.info("Loading commenced")
 # Create Trainer
 trainer = Seq2SeqTrainer(
     model=model,
@@ -49,5 +47,5 @@ trainer = Seq2SeqTrainer(
     train_dataset=finetuning_data,
 )
 
-logger.info("Saving the trained model")
+logging.info("Saving the trained model")
 trainer.model.save_pretrained('trained_model')

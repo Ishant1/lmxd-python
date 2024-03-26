@@ -10,14 +10,14 @@ class Entity(BaseModel):
 
 class LxdmDocument(BaseModel):
     key: str
-    bbox: list | None
-    word: list | None
-    entity: Entity | None
-    bbox_quantized: list | None
+    bbox: list | None = None
+    word: list | None = None
+    entity: Entity | None = None
+    bbox_quantized: list | None = None
 
     @model_validator(mode="before")
     def compute_bbox_quantized(cls, values):
-        if bbox:
+        if values['bbox']:
             bbox_means = [[np.mean([b[0], b[2]]), np.mean([b[1], b[3]])] for b in
                           values.get('bbox')]
             values['bbox_quantized'] = np.apply_along_axis(get_bins_from_list, arr=bbox_means, axis=0).tolist()
@@ -27,7 +27,7 @@ class LxdmDocument(BaseModel):
 class LxdmSplitDocument(BaseModel):
     key: str
     index: int
-    bbox: list | None
-    word: list | None
-    bbox_quantized: list | None
-    entity: Entity | None
+    bbox: list | None = None
+    word: list | None = None
+    bbox_quantized: list | None = None
+    entity: Entity | None = None
