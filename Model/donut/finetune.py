@@ -27,11 +27,11 @@ training_args = Seq2SeqTrainingArguments(
     output_dir="donut-training",
     num_train_epochs=3,
     learning_rate=2e-5,
-    per_device_train_batch_size=2,
+    per_device_train_batch_size=1,
     weight_decay=0.01,
     fp16=True,
     logging_steps=20,
-    save_total_limit=2,
+    save_total_limit=1,
     evaluation_strategy="no",
     save_strategy="epoch",
     predict_with_generate=True,
@@ -48,4 +48,4 @@ trainer = Seq2SeqTrainer(
 )
 
 logging.info("Saving the trained model")
-trainer.model.save_pretrained('trained_model')
+trainer.save_model('trained_model')

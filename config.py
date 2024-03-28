@@ -4,8 +4,8 @@ import transformers as tr
 tmpdir = tempfile.TemporaryDirectory()
 local_training_root = tmpdir.name
 
-IMAGE_PATH = r"C:\dev\datasets\floorplan\images"
-RESPONSE_FILEPATH = r"C:\dev\datasets\floorplan\accepted_responses.json"
+IMAGE_PATH = r"accepted_images"
+RESPONSE_FILEPATH = r"accepted_responses.json"
 MODEL_PATH = r"C:\dev\models\gpt2"
 
 training_args = tr.TrainingArguments(
