@@ -9,7 +9,6 @@ from datasets.floorplan.ocr import OcrFileOutput
 class RoomInfo(BaseModel):
     name: str| None = None
     dimension: str|None = None
-    area: float| None = None
 
 
 class FloorplanEntity(Entity):

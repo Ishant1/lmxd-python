@@ -1,51 +1,43 @@
+import sys
+sys.path = ["lmxd-python"]+sys.path
+
+import os
 from Model.donut.utils import load_model_and_tokenizer, get_special_tokens
 from datasets.floorplan.preprocess import FloorplanEntity, RoomInfo, create_floorplan_document, load_all_results
-from config import RESPONSE_FILEPATH, IMAGE_PATH
+from config import RESPONSE_FILEPATH, IMAGE_PATH, donut_training_args, DATA_FOLDER
 from Model.donut.dataset import DonutFinetuning
-from transformers import Seq2SeqTrainingArguments, Seq2SeqTrainer
+from transformers import Seq2SeqTrainer
 import logging
 
-logging.info("Starting the process")
+log = logging.getLogger('')
+log.setLevel(logging.DEBUG)
+log.addHandler(logging.StreamHandler(sys.stdout))
+
+log.info("Starting the process")
 special_tokens = get_special_tokens([FloorplanEntity, RoomInfo])
 
-logging.info("Loading the model")
+log.info("Loading the model")
 model, preprocessor = load_model_and_tokenizer("naver-clova-ix/donut-base" , special_tokens)
 
-logging.info("Loading the data")
-all_entities = load_all_results(RESPONSE_FILEPATH)
+log.info("Loading the data")
+all_entities = load_all_results(os.path.join(DATA_FOLDER, RESPONSE_FILEPATH))
 documents = [
     create_floorplan_document(key=key,entity=all_entities[key]) for key in all_entities.keys()
 ]
-finetuning_data = DonutFinetuning(documents, preprocessor, IMAGE_PATH)
+finetuning_data = DonutFinetuning(documents[4:], preprocessor, os.path.join(DATA_FOLDER, IMAGE_PATH))
 
 
 # hyperparameters used for multiple args
 hf_repository_id = "donut-base-sroie"
 
-# Arguments for training
-training_args = Seq2SeqTrainingArguments(
-    output_dir="donut-training",
-    num_train_epochs=3,
-    learning_rate=2e-5,
-    per_device_train_batch_size=1,
-    weight_decay=0.01,
-    fp16=True,
-    logging_steps=20,
-    save_total_limit=1,
-    evaluation_strategy="no",
-    save_strategy="epoch",
-    predict_with_generate=True,
-    # push to hub parameters
-    report_to=None,
-)
-
-logging.info("Loading commenced")
+log.info("Loading commenced")
 # Create Trainer
 trainer = Seq2SeqTrainer(
     model=model,
-    args=training_args,
+    args=donut_training_args,
     train_dataset=finetuning_data,
 )
+trainer.train()
 
-logging.info("Saving the trained model")
+log.info("Saving the trained model")
 trainer.save_model('trained_model')

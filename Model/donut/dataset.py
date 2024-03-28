@@ -9,11 +9,11 @@ class DonutFinetuning(Dataset):
         self.data_list = data_list
         self.processor = processor
         self.image_dir = image_dir
-        
+
     def __len__(self):
         return len(self.data_list)
-    
-    def __getitem__(self,index):
+
+    def __getitem__(self, index):
         ignore_id = -100
         max_length = 512
         data_point = self.data_list[index]
@@ -22,7 +22,7 @@ class DonutFinetuning(Dataset):
             key=data_point.key,
             image_dir=self.image_dir
         )
-        
+
         target_text = json2token(
             entity=data_point.entity.dict()
         )
@@ -39,7 +39,7 @@ class DonutFinetuning(Dataset):
         # tokenize document
         input_ids = self.processor.tokenizer(
             target_text,
-            add_special_tokens=False,
+            add_special_tokens=True,
             max_length=max_length,
             padding="max_length",
             truncation=True,
@@ -50,7 +50,7 @@ class DonutFinetuning(Dataset):
         labels[labels == self.processor.tokenizer.pad_token_id] = ignore_id  # model doesn't need to predict pad token
         return {"pixel_values": pixel_values, "labels": labels, "target_sequence": target_text}
 
-    
+
 def json2token(
         entity: dict
 ):
@@ -62,9 +62,9 @@ def json2token(
             output = ""
             for k in obj.keys():
                 output += (
-                    fr"<s_{k}>"
-                    + json2token(obj[k])
-                    + fr"</s_{k}>"
+                        fr"<s_{k}>"
+                        + json2token(obj[k])
+                        + fr"</s_{k}>"
                 )
             return output
     elif type(obj) == list:
@@ -80,12 +80,11 @@ def json2token(
 def load_image_from_local(key: str, image_dir: str):
     img = Image.open(f"{image_dir}/{key}.jpeg")
     numpy_img = np.array(img)
-    if len(numpy_img.shape)==2:
+    if len(numpy_img.shape) == 2:
         numpy_img = cv2.cvtColor(numpy_img, cv2.COLOR_GRAY2RGB)
-    elif len(numpy_img.shape)==3 and numpy_img.shape[2]!=3:
+    elif len(numpy_img.shape) == 3 and numpy_img.shape[2] != 3:
         numpy_img = numpy_img.mean(axis=2).astype("uint8")
         numpy_img = cv2.cvtColor(numpy_img, cv2.COLOR_GRAY2RGB)
     return numpy_img
 
-    
-    
+
