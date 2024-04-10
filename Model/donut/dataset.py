@@ -1,4 +1,5 @@
 from torch.utils.data import Dataset
+import operator
 from PIL import Image
 import numpy as np
 import cv2
@@ -17,6 +18,8 @@ class DonutFinetuning(Dataset):
         ignore_id = -100
         max_length = 512
         data_point = self.data_list[index]
+        entity_dict = data_point.entity.dict()
+        entity_dict['rooms'] = sorted(entity_dict['rooms'], key=operator.itemgetter('name'))
 
         image = load_image_from_local(
             key=data_point.key,
@@ -24,7 +27,7 @@ class DonutFinetuning(Dataset):
         )
 
         target_text = json2token(
-            entity=data_point.entity.dict()
+            entity=entity_dict
         )
 
         try:
@@ -86,5 +89,3 @@ def load_image_from_local(key: str, image_dir: str):
         numpy_img = numpy_img.mean(axis=2).astype("uint8")
         numpy_img = cv2.cvtColor(numpy_img, cv2.COLOR_GRAY2RGB)
     return numpy_img
-
-
