@@ -3,7 +3,8 @@ sys.path = ["lmxd-python"]+sys.path
 
 import os
 from Model.donut.utils import load_model_and_tokenizer, get_special_tokens
-from datasets.floorplan.preprocess import FloorplanEntity, RoomInfo, create_floorplan_document, load_all_results
+from datasets.floorplan.preprocess import create_floorplan_document, load_all_results
+from datasets.floorplan.schemas import RoomInfo, FloorplanEntity
 from config import RESPONSE_FILEPATH, IMAGE_PATH, donut_training_args, DATA_FOLDER
 from Model.donut.dataset import DonutFinetuning
 from transformers import Seq2SeqTrainer

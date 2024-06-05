@@ -5,10 +5,12 @@ from tqdm import tqdm
 from Model.gpt2.dataset import OcrDatasetFinetuning
 from Model.gpt2.utils import load_model_and_tokenizer
 from config import RESPONSE_FILEPATH, IMAGE_PATH, training_args, MODEL_PATH
-from datasets.floorplan.ocr import OcrEngine, load_ocr_from_file, save_ocr_result
+from datasets.floorplan.ocr import OcrEngine
+from datasets.floorplan.utils import save_ocr_result, load_ocr_from_file
 from datasets.floorplan.preprocess import (
-    create_floorplan_document, create_split_from_document, load_all_results, RoomInfo, FloorplanEntity
+    create_floorplan_document, create_split_from_document, load_all_results
 )
+from datasets.floorplan.schemas import RoomInfo, FloorplanEntity
 import transformers as tr
 
 def run_finetune(
